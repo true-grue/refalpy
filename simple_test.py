@@ -8,7 +8,7 @@ imports = {
 @refal(imports)
 def rules():
     pal[_] = True
-    pal[s] = True
+    pal[s.x] = True
     pal[s.a, e.b, s.a] = pal[e.b]
     pal[e.x] = False
 
@@ -29,6 +29,7 @@ def rules():
 
 def test():
     assert rules('pal', tuple('abba')) == (True,)
+    assert rules('pal', tuple('a')) == (True,)
     assert rules('pal', tuple('abcd')) == (False,)
     assert rules('reverse', tuple('abc')) == ('c', 'b', 'a')
     assert rules('rle', tuple('aaaabbbcca')) == (
