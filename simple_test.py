@@ -10,7 +10,7 @@ def rules():
     pal[_] = True
     pal[s] = True
     pal[s.a, e.b, s.a] = pal[e.b]
-    pal[e] = False
+    pal[e.x] = False
 
     reverse[_] = _
     reverse[s.a, e.b] = reverse[e.b], s.a
@@ -29,6 +29,7 @@ def rules():
 
 def test():
     assert rules('pal', tuple('abba')) == (True,)
+    assert rules('pal', tuple('abcd')) == (False,)
     assert rules('reverse', tuple('abc')) == ('c', 'b', 'a')
     assert rules('rle', tuple('aaaabbbcca')) == (
         ('a', 4), ('b', 3), ('c', 2), ('a', 1))
