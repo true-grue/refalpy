@@ -119,4 +119,4 @@ def compile_func(rules):
         rule_code = compile_rule(rule)
         code += [(Op.alt, len(code) + len(rule_code) + 1)] + rule_code
     code += compile_rule(last)
-    return code
+    return tuple(code)

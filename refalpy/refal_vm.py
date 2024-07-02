@@ -178,9 +178,15 @@ def ret(vm):
 
 
 def execute_func(f, arg, funcs):
-    vm = VM([(push_list, arg), (call, f)], funcs)
+    vm = VM(((push_list, arg), (call, f)), funcs)
     execute(vm)
     return vm.stack.pop()
+
+
+def show_error(vm):
+    names = {v: k for k, v in vm.funcs.items() if not callable(v)}
+    arg, _, _ = vm.holes[0]
+    return f"can't match '{names[vm.code]}' with {repr(arg)}"
 
 
 def execute(vm):
@@ -189,5 +195,5 @@ def execute(vm):
         vm.pc += 1
         if not op(vm, *args):
             if not vm.alts:
-                raise RuntimeError('matching error')
+                raise RuntimeError(show_error(vm))
             vm.pc = vm.alts.pop()
