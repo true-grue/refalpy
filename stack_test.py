@@ -21,7 +21,7 @@ def rules():
     comp[{t.a, '*', t.b}] = comp[t.a], comp[t.b], 'mul'
     comp[{t.a, '/', t.b}] = comp[t.a], comp[t.b], 'div'
     comp[s.val] = {op[type[s.val]], s.val}
-    comp[_] = _
+    comp = _
 
     get[{e.x, {s.key, t.val}, e.y}, s.key] = t.val
     set[{e.x, {s.key, t.val}, e.y}, s.key, t.new] = {e.x, {s.key, t.new}, e.y}
@@ -50,3 +50,6 @@ def test():
         ('s', '=', (('n', '*', ('n', '+', 1)), '/', 2))
     )
     assert rules('sem', prog) == ((('n', 10), ('s', 55.0)),)
+
+
+test()

@@ -177,7 +177,7 @@ def ret(vm):
     return False
 
 
-def execute_func(f, arg, funcs):
+def execute_func(funcs, f, arg=()):
     vm = VM(((push_list, arg), (call, f)), funcs)
     execute(vm)
     return vm.stack.pop()

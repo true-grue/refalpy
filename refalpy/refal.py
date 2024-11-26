@@ -18,6 +18,8 @@ def parse_elem(tree):
             return [ty, f'{ty}.{name}']
         case ast.Constant(val):
             return val
+        case _:
+            raise SyntaxError(ast.unparse(tree))
 
 
 def parse_left_elem(tree):
@@ -44,6 +46,8 @@ def parse_right_elem(tree):
             return tuple(parse_right_elem(elem) for elem in lst)
         case ast.Subscript(ast.Name(name), args):
             return ['call', name, parse_right(args)]
+        case ast.Name(name):
+            return ['call', name, ()]
         case _:
             return parse_elem(tree)
 
@@ -63,9 +67,14 @@ def parse_refal(tree):
     for rule in tree:
         match rule:
             case ast.Assign([ast.Subscript(ast.Name(name), left)], right):
-                if name not in ir:
-                    ir[name] = []
-                ir[name].append((parse_left(left), parse_right(right)))
+                pass
+            case ast.Assign([ast.Name(name)], right):
+                left = ast.Name('_')
+            case _:
+                raise SyntaxError(ast.unparse(rule))
+        if name not in ir:
+            ir[name] = []
+        ir[name].append((parse_left(left), parse_right(right)))
     return ir
 
 
@@ -80,5 +89,5 @@ def refal(imports):
     def deco(f):
         tree = ast.parse(inspect.getsource(f))
         o = Refal(tree.body[0].body, imports)
-        return lambda *args: execute_func(*args, o.funcs) if args else o
+        return lambda *args: execute_func(o.funcs, *args) if args else o
     return deco

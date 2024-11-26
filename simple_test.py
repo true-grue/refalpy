@@ -7,12 +7,12 @@ imports = {
 
 @refal(imports)
 def rules():
-    pal[_] = True
+    pal = True
     pal[s.x] = True
     pal[s.a, e.b, s.a] = pal[e.b]
     pal[e.x] = False
 
-    reverse[_] = _
+    reverse = _
     reverse[s.a, e.b] = reverse[e.b], s.a
 
     rle[s.x, e.tail] = rle[{s.x, 1}, e.tail]
@@ -37,3 +37,5 @@ def test():
     assert rules('uniq', tuple('aaaabbbcca')) == ('a', 'b', 'c')
     assert rules('zip', ((1, 2, 3, 4), ('a', 'b', 'c', 'd'))) == (
         (1, 'a'), (2, 'b'), (3, 'c'), (4, 'd'))
+
+test()
