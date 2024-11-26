@@ -32,8 +32,6 @@ def parse_left_elem(tree):
 
 def parse_left(tree):
     match tree:
-        case ast.Name('_'):
-            return ()
         case ast.Tuple(lst):
             return tuple(parse_left_elem(elem) for elem in lst)
         case _:
@@ -67,14 +65,14 @@ def parse_refal(tree):
     for rule in tree:
         match rule:
             case ast.Assign([ast.Subscript(ast.Name(name), left)], right):
-                pass
+                left, right = parse_left(left), parse_right(right)
             case ast.Assign([ast.Name(name)], right):
-                left = ast.Name('_')
+                left, right = (), parse_right(right)
             case _:
                 raise SyntaxError(ast.unparse(rule))
         if name not in ir:
             ir[name] = []
-        ir[name].append((parse_left(left), parse_right(right)))
+        ir[name].append((left, right))
     return ir
 
 
