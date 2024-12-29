@@ -1,6 +1,6 @@
 import ast
 import inspect
-from .refal_vm import execute_func
+from .refal_vm import run_func
 from .refal_compiler import compile_func
 
 
@@ -83,9 +83,9 @@ def compile_refal(ir):
     return funcs
 
 
-def refal(imports):
+def refal(imports=None):
     def deco(f):
         tree = ast.parse(inspect.getsource(f))
-        o = Refal(tree.body[0].body, imports)
-        return lambda *args: execute_func(o.funcs, *args) if args else o
+        o = Refal(tree.body[0].body, imports or {})
+        return lambda *args: run_func(o.funcs, *args) if args else o
     return deco

@@ -177,9 +177,9 @@ def ret(vm):
     return False
 
 
-def execute_func(funcs, f, arg=()):
+def run_func(funcs, f, arg=()):
     vm = VM(((push_list, arg), (call, f)), funcs)
-    execute(vm)
+    run(vm)
     return vm.stack.pop()
 
 
@@ -189,7 +189,7 @@ def show_error(vm):
     return f"can't match '{names[vm.code]}' with {repr(arg)}"
 
 
-def execute(vm):
+def run(vm):
     while vm.pc is not None:
         op, *args = vm.code[vm.pc]
         vm.pc += 1
